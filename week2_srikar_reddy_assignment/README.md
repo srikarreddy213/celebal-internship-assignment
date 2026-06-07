@@ -74,14 +74,14 @@ Charts saved as `actual_vs_predicted.png` and `future_forecast.png`.
 ```
 week2_srikar_reddy_assignment/
 ├── data/
-├── notebooks/          # 01_eda.ipynb, 02_forecasting.ipynb
-├── src/                # preprocessing.py, features.py, models.py
+│   └── tesla_deliveries_dataset_2015_2025.csv
+├── src/
+│   ├── preprocessing.py
+│   ├── features.py
+│   └── models.py
 ├── main.py
-├── model_results.csv
-├── test_predictions.csv
-├── actual_vs_predicted.png
-├── future_forecast.png
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
 
 ## How to Run
