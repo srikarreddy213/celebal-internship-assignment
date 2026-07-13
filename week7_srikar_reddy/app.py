@@ -111,8 +111,7 @@ if pdf_path:
                 st.warning("⚠️ Enter Google API Key.")
                 st.stop()
             from langchain_google_genai import ChatGoogleGenerativeAI
-            llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=google_api_key)
-        else:
+            llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", google_api_key=google_api_key)        else:
             llm = load_local_llm()
 
         RAG_PROMPT = "Use the context to answer: {context}\nQuestion: {question}"
