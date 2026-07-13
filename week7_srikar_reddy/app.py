@@ -42,6 +42,10 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 if "ingested_file" not in st.session_state:
     st.session_state.ingested_file = None
+if "available_models" not in st.session_state:
+    st.session_state.available_models = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
+if "last_api_key" not in st.session_state:
+    st.session_state.last_api_key = None
 
 # ==========================================
 # PREMIUM CSS STYLING
@@ -192,6 +196,27 @@ def load_embedding_model():
         encode_kwargs={"normalize_embeddings": True}
     )
 
+def get_available_gemini_models(api_key):
+    import requests
+    try:
+        url = f"https://generativelanguage.googleapis.com/v1/models?key={api_key}"
+        res = requests.get(url, timeout=5)
+        if res.status_code == 200:
+            models_data = res.json().get("models", [])
+            valid_models = []
+            for m in models_data:
+                name = m.get("name", "")
+                methods = m.get("supportedGenerationMethods", [])
+                if "generateContent" in methods and name.startswith("models/"):
+                    model_id = name.replace("models/", "")
+                    if "gemini" in model_id.lower():
+                        valid_models.append(model_id)
+            if valid_models:
+                return sorted(list(set(valid_models)))
+    except Exception:
+        pass
+    return ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
+
 @st.cache_resource(show_spinner="⏳ Loading Local LLM (google/flan-t5-base) - This may take a moment...")
 def load_local_llm():
     tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
@@ -236,16 +261,6 @@ llm_backend = st.sidebar.selectbox(
     help="Select the AI Backend to generate answers."
 )
 
-# Gemini Model Selection
-gemini_model = "gemini-1.5-flash"
-if "Gemini" in llm_backend:
-    gemini_model = st.sidebar.selectbox(
-        "Gemini Model Version",
-        ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"],
-        index=0,
-        help="Select the Gemini model to use for generating answers."
-    )
-
 # API Key determination
 google_api_key = ""
 api_status_html = ""
@@ -269,6 +284,29 @@ elif llm_backend == "Google Gemini (Custom Key)":
         api_status_html = "<span class='status-badge status-inactive'>● Key Missing</span>"
 else:
     api_status_html = "<span class='status-badge status-active'>● CPU Mode Active</span>"
+
+# Fetch available models if API key is present and not cached yet
+if google_api_key.strip():
+    if st.session_state.get("last_api_key") != google_api_key:
+        st.session_state.last_api_key = google_api_key
+        st.session_state.available_models = get_available_gemini_models(google_api_key)
+
+# Gemini Model Selection
+gemini_model = "gemini-1.5-flash"
+if "Gemini" in llm_backend:
+    models_list = st.session_state.get("available_models", ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"])
+    default_idx = 0
+    if "gemini-1.5-flash" in models_list:
+        default_idx = models_list.index("gemini-1.5-flash")
+    elif "gemini-2.0-flash" in models_list:
+        default_idx = models_list.index("gemini-2.0-flash")
+        
+    gemini_model = st.sidebar.selectbox(
+        "Gemini Model Version",
+        models_list,
+        index=default_idx,
+        help="Select the Gemini model to use for generating answers."
+    )
 
 # Display Connection Badge in Sidebar
 st.sidebar.markdown(api_status_html, unsafe_allow_html=True)
