@@ -148,7 +148,7 @@ st.markdown("""
         border: 1px solid rgba(239, 68, 68, 0.2);
     }
 </style>
-""", unsafe_allowed_html=True)
+""", unsafe_allow_html=True)
 
 # ==========================================
 # CUSTOM LOCAL LLM CLASS (T5-Base Fallback)
@@ -216,7 +216,7 @@ def get_vector_store(pdf_path, chunk_size, chunk_overlap):
 # ==========================================
 st.sidebar.markdown(
     "<h3 style='margin-bottom:0;'>⚙️ System Controls</h3>",
-    unsafe_allowed_html=True
+    unsafe_allow_html=True
 )
 
 # Backend Selection
@@ -249,10 +249,10 @@ else:
     api_status_html = "<span class='status-badge status-active'>● CPU Mode Active</span>"
 
 # Display Connection Badge in Sidebar
-st.sidebar.markdown(api_status_html, unsafe_allowed_html=True)
+st.sidebar.markdown(api_status_html, unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
-st.sidebar.markdown("<h3>📁 Ingestion Control</h3>", unsafe_allowed_html=True)
+st.sidebar.markdown("<h3>📁 Ingestion Control</h3>", unsafe_allow_html=True)
 doc_source = st.sidebar.radio(
     "Document Source",
     ["Use default 'knowledge.pdf'", "Upload custom PDF"],
@@ -302,11 +302,11 @@ else:
 # ==========================================
 st.markdown(
     "<div class='header-container'><div class='main-title'>📄 RAG Intellect Workspace</div></div>",
-    unsafe_allowed_html=True
+    unsafe_allow_html=True
 )
 st.markdown(
     "<div class='sub-title'>Perform deep intelligent document analysis using Retrieval-Augmented Generation.</div>",
-    unsafe_allowed_html=True
+    unsafe_allow_html=True
 )
 
 if pdf_path:
@@ -467,7 +467,7 @@ if pdf_path:
                             f"<hr style='margin: 8px 0; border: none; border-top: 1px solid rgba(148, 163, 184, 0.15);'>"
                             f"<p style='font-size:0.95rem; font-style:italic;'>\"{doc.page_content}\"</p>"
                             f"</div>",
-                            unsafe_allowed_html=True
+                            unsafe_allow_html=True
                         )
             else:
                 # Display generic statistics and first 3 chunks
@@ -479,7 +479,7 @@ if pdf_path:
                         f"<h4>Chunk {idx + 1} (Page {c.metadata.get('page', 0) + 1})</h4>"
                         f"<p style='font-size:0.95rem;'>{c.page_content}</p>"
                         f"</div>",
-                        unsafe_allowed_html=True
+                        unsafe_allow_html=True
                     )
 
         # ------------------------------------------
@@ -493,22 +493,22 @@ if pdf_path:
             with kpi1:
                 st.markdown(
                     f"<div class='metric-card'><div class='metric-val'>{os.path.basename(pdf_path)}</div><div class='metric-lbl'>File Name</div></div>",
-                    unsafe_allowed_html=True
+                    unsafe_allow_html=True
                 )
             with kpi2:
                 st.markdown(
                     f"<div class='metric-card'><div class='metric-val'>{total_pages}</div><div class='metric-lbl'>Total Pages</div></div>",
-                    unsafe_allowed_html=True
+                    unsafe_allow_html=True
                 )
             with kpi3:
                 st.markdown(
                     f"<div class='metric-card'><div class='metric-val'>{len(chunks)}</div><div class='metric-lbl'>Text Chunks</div></div>",
-                    unsafe_allowed_html=True
+                    unsafe_allow_html=True
                 )
             with kpi4:
                 st.markdown(
                     f"<div class='metric-card'><div class='metric-val'>{llm_backend.split('(')[0]}</div><div class='metric-lbl'>Active Model</div></div>",
-                    unsafe_allowed_html=True
+                    unsafe_allow_html=True
                 )
 
             # Execution logic flow diagram
