@@ -18,7 +18,16 @@ from typing import Optional, List, Any
 # ==========================================
 # CONSTANTS & DEFAULT CONFIGURATION
 # ==========================================
-DEFAULT_API_KEY = os.environ.get("GOOGLE_API_KEY", os.environ.get("GEMINI_API_KEY", ""))
+# Try to get API key from Streamlit secrets first, then fall back to environment variables
+def get_secret(key, default=""):
+    try:
+        if key in st.secrets:
+            return st.secrets[key]
+    except Exception:
+        pass
+    return os.environ.get(key, default)
+
+DEFAULT_API_KEY = get_secret("GOOGLE_API_KEY", get_secret("GEMINI_API_KEY", ""))
 
 # Page configurations
 st.set_page_config(
@@ -233,7 +242,10 @@ api_status_html = ""
 
 if llm_backend == "Google Gemini (Pre-configured)":
     google_api_key = DEFAULT_API_KEY
-    api_status_html = "<span class='status-badge status-active'>● Gemini Key Loaded</span>"
+    if google_api_key.strip():
+        api_status_html = "<span class='status-badge status-active'>● Gemini Key Loaded</span>"
+    else:
+        api_status_html = "<span class='status-badge status-inactive'>● Key Missing</span>"
 elif llm_backend == "Google Gemini (Custom Key)":
     google_api_key = st.sidebar.text_input(
         "Enter API Key",
