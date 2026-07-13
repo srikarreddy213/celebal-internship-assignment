@@ -337,12 +337,15 @@ if st.sidebar.button("🗑️ Clear Chat History", use_container_width=True):
 # INGESTION PIPELINE EXECUTION
 # ==========================================
 pdf_path = None
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
 if doc_source == "Use default 'knowledge.pdf'":
-    if os.path.exists("knowledge.pdf"):
-        pdf_path = "knowledge.pdf"
+    default_pdf_path = os.path.join(current_dir, "knowledge.pdf")
+    if os.path.exists(default_pdf_path):
+        pdf_path = default_pdf_path
     else:
-        # Search directory for any pdf
-        local_pdfs = glob.glob("*.pdf")
+        # Search app directory for any pdf
+        local_pdfs = glob.glob(os.path.join(current_dir, "*.pdf"))
         if local_pdfs:
             pdf_path = local_pdfs[0]
         else:
