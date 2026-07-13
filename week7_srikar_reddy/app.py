@@ -17,53 +17,48 @@ from typing import Optional, List, Any
 # ==========================================
 # PAGE CONFIGURATION & CUSTOM STYLING
 # ==========================================
-st.set_page_config(
-    page_title="RAG Document QA System",
-    page_icon="📄",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+st.set_page_config(page_title="RAG Document QA System", page_icon="📄", layout="wide", initial_sidebar_state="expanded")
 
 # Custom CSS for modern premium styling
+# NOTICE: We have doubled the curly braces {{ }} and used the correct parameter 'unsafe_allow_html'
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #1E3A8A;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        font-size: 1.2rem;
-        color: #4B5563;
-        margin-bottom: 2rem;
-    }
-    .status-card {
-        background-color: #F3F4F6;
-        border-radius: 8px;
-        padding: 1rem;
-        border-left: 4px solid #3B82F6;
-        margin-bottom: 1.5rem;
-    }
-    .answer-card {
-        background-color: #EFF6FF;
-        border-radius: 8px;
-        padding: 1.5rem;
-        border-left: 5px solid #2563EB;
-        margin-top: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .source-card {
-        background-color: #FAFAFA;
-        border-radius: 6px;
-        padding: 1rem;
-        border: 1px solid #E5E7EB;
-        margin-bottom: 0.75rem;
-    }
+.main-header {{
+    font-size: 2.5rem; 
+    font-weight: 700; 
+    color: #1E3A8A; 
+    margin-bottom: 0.5rem; 
+}}
+.sub-header {{
+    font-size: 1.2rem; 
+    color: #4B5563; 
+    margin-bottom: 2rem; 
+}}
+.status-card {{
+    background-color: #F3F4F6; 
+    border-radius: 8px; 
+    padding: 1rem; 
+    border-left: 4px solid #3B82F6; 
+    margin-bottom: 1.5rem; 
+}}
+.answer-card {{
+    background-color: #EFF6FF; 
+    border-radius: 8px; 
+    padding: 1.5rem; 
+    border-left: 5px solid #2563EB; 
+    margin-top: 1.5rem; 
+    margin-bottom: 1.5rem; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+}}
+.source-card {{
+    background-color: #FAFAFA; 
+    border-radius: 6px; 
+    padding: 1rem; 
+    border: 1px solid #E5E7EB; 
+    margin-bottom: 0.75rem; 
+}}
 </style>
-""", unsafe_allowed_html=True)
-
+""", unsafe_allow_html=True)
 # ==========================================
 # CUSTOM LOCAL LLM CLASS (T5-Base)
 # ==========================================
