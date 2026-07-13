@@ -236,6 +236,16 @@ llm_backend = st.sidebar.selectbox(
     help="Select the AI Backend to generate answers."
 )
 
+# Gemini Model Selection
+gemini_model = "gemini-1.5-flash"
+if "Gemini" in llm_backend:
+    gemini_model = st.sidebar.selectbox(
+        "Gemini Model Version",
+        ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"],
+        index=0,
+        help="Select the Gemini model to use for generating answers."
+    )
+
 # API Key determination
 google_api_key = ""
 api_status_html = ""
@@ -344,9 +354,10 @@ if pdf_path:
                 # set system environment key as well
                 os.environ["GOOGLE_API_KEY"] = google_api_key
                 llm = ChatGoogleGenerativeAI(
-                    model="gemini-1.5-flash",
+                    model=gemini_model,
                     google_api_key=google_api_key,
-                    temperature=0.3
+                    temperature=0.3,
+                    api_version="v1"
                 )
             except ImportError:
                 st.error("❌ `langchain-google-genai` is not available. Please install it.")
