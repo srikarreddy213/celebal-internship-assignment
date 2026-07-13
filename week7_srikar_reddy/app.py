@@ -18,7 +18,7 @@ from typing import Optional, List, Any
 # ==========================================
 # CONSTANTS & DEFAULT CONFIGURATION
 # ==========================================
-DEFAULT_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
+DEFAULT_API_KEY = os.environ.get("GOOGLE_API_KEY", os.environ.get("GEMINI_API_KEY", ""))
 
 # Page configurations
 st.set_page_config(
