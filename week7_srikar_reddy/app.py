@@ -414,8 +414,22 @@ if pdf_path:
                         start_time = time.time()
                         # Retrieve contexts
                         retrieved_docs = retriever.invoke(prompt)
-                        # Invoke RAG chain
-                        answer = rag_chain.invoke(prompt)
+                        # Invoke RAG chain with error handling
+                        try:
+                            answer = rag_chain.invoke(prompt)
+                        except Exception as e:
+                            err_msg = str(e)
+                            if "API_KEY_INVALID" in err_msg or "key not valid" in err_msg or "API key not valid" in err_msg:
+                                message_placeholder.error(
+                                    "❌ **Invalid Gemini API Key**: The loaded API Key is invalid or expired. "
+                                    "Please check your API key settings or choose **Google Gemini (Custom Key)** "
+                                    "in the sidebar to enter a valid key."
+                                )
+                            else:
+                                message_placeholder.error(
+                                    f"❌ **Error calling LLM**: {err_msg}"
+                                )
+                            st.stop()
                         elapsed_time = time.time() - start_time
                         
                         # Prepare sources
